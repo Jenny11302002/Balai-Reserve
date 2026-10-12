@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-Reserve Admin Management Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1e40af;
+      --success: #22c55e;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --dark: #1e293b;
+      --sidebar-bg: #334155;
+      --sidebar-active: #2563eb;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --toast-bg: rgba(0,0,0,0.85);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-50);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+      color: var(--dark);
+      transition: background .25s, color .25s;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--sidebar-bg);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 2px 0 8px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .user-info {
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .user-details h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .user-details p {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+
+    .nav-menu {
+      flex: 1;
+      padding: 1rem 0;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.05);
+      color: white;
+    }
+
+    .nav-item.active {
+      background: rgba(37, 99, 235, 0.15);
+      border-left-color: var(--sidebar-active);
+      color: white;
+    }
+
+    .nav-icon {
+      font-size: 1.2rem;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Top Bar */
+    .topbar {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .topbar-left h1 {
+      font-size: 1.5rem;
+      color: var(--dark);
+      margin: 0;
+    }
+
+    .topbar-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 0.625rem 1.25rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s;
+      font-size: 0.875rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #16a34a;
+    }
+
+    .btn-secondary {
+      background: var(--gray-200);
+      color: var(--gray-700);
+    }
+
+    .btn-secondary:hover {
+      background: var(--gray-100);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-sm {
+      padding: 0.375rem 0.75rem;
+      font-size: 0.8rem;
+    }
+
+    /* Content Area */
+    .content-area {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 2rem;
+      background: linear-gradient(180deg, rgba(255,255,255,0.8), transparent);
+      scroll-behavior: smooth;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: all 0.2s;
+    }
+
+    .stat-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .stat-icon.blue {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .stat-icon.green {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    }
+
+    .stat-icon.orange {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    }
+
+    .stat-icon.red {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .stat-info h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .stat-info p {
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+    }
+
+    /* Card */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--gray-200);
+      margin-bottom: 1.5rem;
+    }
+
+    .card h3, .card h4 {
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    /* Table Section */
+    .table-section {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+
+    .table-header {
+      background: var(--success);
+      color: white;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: var(--gray-50);
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--gray-700);
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--gray-200);
+      font-size: 0.875rem;
+      color: var(--gray-700);
+    }
+
+    tr:hover {
+      background: var(--gray-50);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 900px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 1.25rem;
+      color: var(--dark);
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gray-600);
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    input, select, textarea {
+      padding: 0.625rem 1rem;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid var(--gray-200);
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+    }
+
+    /* Chart */
+    .chart-container {
+      position: relative;
+      height: 280px;
+      width: 100%;
+    }
+
+    canvas {
+      max-height: 100%;
+    }
+
+    /* Charts - FIXED LAYOUT */
+    .charts {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Status Badge */
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-present {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+    }
+
+    .status-absent {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+
+    .status-late {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .status-on-duty {
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--primary);
+    }
+
+    .status-off-duty {
+      background: rgba(100, 116, 139, 0.1);
+      color: #64748b;
+    }
+
+    .status-in\ progress {
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--primary);
+    }
+
+    .status-pending {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .status-completed {
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--success);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--toast-bg);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      z-index: 2000;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+      transform: translateY(10px);
+      opacity: 0;
+      transition: all 0.25s;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 70px;
+      }
+
+      .logo-text, .user-details, .nav-item:not(.active) span:not(.nav-icon) {
+        display: none;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .charts {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">👥</div>
+      <span class="logo-text">Admin Portal</span>
+    </div>
+
+    <div class="user-info">
+      <div class="user-avatar">👤</div>
+      <div class="user-details">
+        <h4 id="adminName">Admin Member</h4>
+        <p>Front Desk</p>
+      </div>
+    </div>
+
+    <div class="nav-menu">
+      <div class="nav-item active" data-page="dashboard">
+        <span class="nav-icon">📊</span>
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-item" data-page="admin">
+        <span class="nav-icon">👥</span>
+        <span>Admin Directory</span>
+      </div>
+      <div class="nav-item" data-page="schedule">
+        <span class="nav-icon">📅</span>
+        <span>Schedule</span>
+      </div>
+      <div class="nav-item" data-page="attendance">
+        <span class="nav-icon">✓</span>
+        <span>Attendance</span>
+      </div>
+      <div class="nav-item" data-page="tasks">
+        <span class="nav-icon">📋</span>
+        <span>Tasks</span>
+      </div>
+      <div class="nav-item" data-page="performance">
+        <span class="nav-icon">⭐</span>
+        <span>Performance</span>
+      </div>
+      <div class="nav-item" data-page="reports">
+        <span class="nav-icon">📈</span>
+        <span>Reports</span>
+      </div>
+      <div class="nav-item" data-page="chat">
+        <span class="nav-icon">💬</span>
+        <span>Admin Chat</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Top Bar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn btn-primary" id="addAdminBtn">➕ Add Admin</button>
+        <button class="btn btn-secondary" onclick="handleLogout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area" id="contentArea"></div>
+  </div>
+
+  <!-- Admin Modal -->
+  <div class="modal" id="adminModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="adminModalTitle">Add New Admin</h2>
+        <button class="close-btn" onclick="closeAdminModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="adminForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="adminFullName" placeholder="Juan Dela Cruz" required>
+            </div>
+            <div class="form-group">
+              <label>Position *</label>
+              <select id="adminPosition" required>
+                <option value="">Select Position</option>
+                <option value="Front Desk">Front Desk</option>
+                <option value="Housekeeping">Housekeeping</option>
+                <option value="Chef">Chef</option>
+                <option value="Waiter">Waiter</option>
+                <option value="Manager">Manager</option>
+                <option value="Security">Security</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" id="adminEmail" placeholder="juan@example.com" required>
+            </div>
+            <div class="form-group">
+              <label>Phone *</label>
+              <input type="tel" id="adminPhone" placeholder="09171234567" required>
+            </div>
+            <div class="form-group">
+              <label>Hire Date *</label>
+              <input type="date" id="adminHireDate" required>
+            </div>
+            <div class="form-group">
+              <label>Salary *</label>
+              <input type="number" id="adminSalary" min="0" placeholder="15000" required>
+            </div>
+            <div class="form-group full">
+              <label>Address</label>
+              <textarea id="adminAddress" rows="2" placeholder="Enter address"></textarea>
+            </div>
+          </div>
+          <input type="hidden" id="editingAdminIndex" value="-1" />
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeAdminModal()">Cancel</button>
+        <button class="btn btn-primary" id="saveAdminBtn">Save Admin</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attendance Modal -->
+  <div class="modal" id="attendanceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Record Attendance</h2>
+        <button class="close-btn" onclick="closeAttendanceModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="attendanceForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Admin Member *</label>
+              <select id="attendanceAdmin" required></select>
+            </div>
+            <div class="form-group">
+              <label>Date *</label>
+              <input type="date" id="attendanceDate" required>
+            </div>
+            <div class="form-group">
+              <label>Status *</label>
+              <select id="attendanceStatus" required>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Late">Late</option>
+                <option value="Leave">Leave</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Time In</label>
+              <input type="time" id="attendanceTimeIn">
+            </div>
+            <div class="form-group">
+              <label>Time Out</label>
+              <input type="time" id="attendanceTimeOut">
+            </div>
+            <div class="form-group full">
+              <label>Notes</label>
+              <textarea id="attendanceNotes" rows="2" placeholder="Add any notes"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeAttendanceModal()">Cancel</button>
+        <button class="btn btn-primary" id="saveAttendanceBtn">Save Attendance</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Socket.IO Client -->
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+  <script>
+    const adminKey = 'ereserve_admin_v1';
+    let adminState = {
+      admin: [],
+      attendance: [],
+      tasks: [],
+      schedules: []
+    };
+
+    // Load state
+    function loadState() {
+      const raw = localStorage.getItem(adminKey);
+      if (raw) {
+        try {
+          adminState = JSON.parse(raw);
+        } catch (e) {
+          console.error('Failed to parse admin state', e);
+        }
+      } else {
+        // Sample data
+        adminState.admin = [
+          { id: 1, name: 'Maria Santos', position: 'Front Desk', email: 'maria@hotel.com', phone: '09171234567', hireDate: '2023-01-15', salary: 18000, address: 'Manila', status: 'Active' },
+          { id: 2, name: 'Juan Reyes', position: 'Housekeeping', email: 'juan@hotel.com', phone: '09171234568', hireDate: '2023-02-20', salary: 16000, address: 'Makati', status: 'Active' },
+          { id: 3, name: 'Ana Garcia', position: 'Chef', email: 'ana@hotel.com', phone: '09171234569', hireDate: '2023-03-10', salary: 22000, address: 'BGC', status: 'Active' },
+        ];
+        adminState.attendance = [
+          { id: 1, adminId: 1, date: new Date().toISOString().split('T')[0], status: 'Present', timeIn: '08:00', timeOut: '17:00', notes: '' },
+        ];
+        persistState();
+      }
+    }
+
+    function persistState() {
+      localStorage.setItem(adminKey, JSON.stringify(adminState));
+    }
+
+    function showToast(message) {
+      const t = document.getElementById('toast');
+      t.textContent = message;
+      t.classList.add('show');
+      clearTimeout(t._timeout);
+      t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    }
+
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    const pageTitle = document.getElementById('pageTitle');
+    const contentArea = document.getElementById('contentArea');
+
+    function setActivePage(item) {
+      navItems.forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      const page = item.dataset.page;
+      pageTitle.textContent = item.textContent.trim();
+      renderPage(page);
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => setActivePage(item));
+    });
+
+    function renderPage(page) {
+      if (page === 'dashboard') renderDashboard();
+      else if (page === 'admin') renderAdminPage();
+      else if (page === 'schedule') renderSchedulePage();
+      else if (page === 'attendance') renderAttendancePage();
+      else if (page === 'tasks') renderTasksPage();
+      else if (page === 'performance') renderPerformancePage();
+      else if (page === 'reports') renderReportsPage();
+      else if (page === 'chat') renderAdminChatPage();
+    }
+
+    // ===== ADMIN CHAT =====
+    const socket = io();
+    let adminChatMessages = [];
+    
+    socket.on('connect', () => {
+      console.log('✅ Admin connected to chat server');
+      socket.emit('join_room', {
+        room: 'admin',
+        userType: 'admin',
+        userName: 'Admin Member'
+      });
+      socket.emit('join_room', {
+        room: 'client_admin',
+        userType: 'admin',
+        userName: 'Admin Member'
+      });
+      socket.emit('get_history', 'client_admin');
+    });
+
+    socket.on('chat_history', (messages) => {
+      adminChatMessages = messages;
+      if (document.getElementById('admin-chat-messages')) {
+        renderAdminChatMessages();
+      }
+    });
+
+    socket.on('receive_message', (messageObj) => {
+      if (messageObj && (messageObj.userType === 'admin' || messageObj.userType === 'client')) {
+        // Only show client-to-admin messages
+        if (messageObj.room === 'client_admin' || messageObj.userType === 'client') {
+          if (!adminChatMessages.find(m => m.id === messageObj.id)) {
+            adminChatMessages.push(messageObj);
+          }
+          if (document.getElementById('admin-chat-messages')) {
+            addAdminChatMessageToUI(messageObj);
+          }
+        }
+      }
+    });
+
+    function renderAdminChatPage() {
+      const contentArea = document.querySelector('.content-area');
+      contentArea.innerHTML = `
+        <div style="display: flex; flex-direction: column; height: 100%; background: white; border-radius: 12px; overflow: hidden;">
+          <div style="padding: 20px; border-bottom: 1px solid #e2e8f0; background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white;">
+            <h2 style="margin: 0; font-size: 1.5rem;">💬 Client Support Chat</h2>
+            <p style="margin: 4px 0 0 0; opacity: 0.9;">Respond to clients who need assistance</p>
+          </div>
+          
+          <div id="admin-chat-messages" style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="text-align: center; opacity: 0.6; padding: 20px;">Loading chat history...</div>
+          </div>
+          
+          <div style="padding: 15px; border-top: 1px solid #e2e8f0; background: #f8fafc; display: flex; gap: 10px;">
+            <input id="admin-chat-input" type="text" placeholder="Type a response..." style="flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px;">
+            <button onclick="sendAdminChat()" style="padding: 12px 24px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Send</button>
+          </div>
+        </div>
+      `;
+      
+      renderAdminChatMessages();
+      
+      // Add event listeners
+      const input = document.getElementById('admin-chat-input');
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') sendAdminChat();
+      });
+      input.focus();
+    }
+
+    function renderAdminChatMessages() {
+      const container = document.getElementById('admin-chat-messages');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      if (adminChatMessages.length === 0) {
+        container.innerHTML = '<div style="text-align: center; opacity: 0.6; padding: 20px;">No messages yet. Start a conversation with your team!</div>';
+        return;
+      }
+      
+      adminChatMessages.forEach(msg => {
+        addAdminChatMessageToUI(msg);
+      });
+      
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function addAdminChatMessageToUI(messageObj) {
+      const container = document.getElementById('admin-chat-messages');
+      if (!container) return;
+      
+      const el = document.createElement('div');
+      el.style.cssText = 'display: flex; gap: 12px;';
+      
+      const isCurrentUser = messageObj.userType === 'admin';
+      el.style.justifyContent = isCurrentUser ? 'flex-end' : 'flex-start';
+      
+      const msgBubble = document.createElement('div');
+      msgBubble.style.cssText = `
+        max-width: 60%;
+        padding: 12px 16px;
+        border-radius: 12px;
+        background: ${isCurrentUser ? '#22c55e' : messageObj.userType === 'client' ? '#3b82f6' : '#e2e8f0'};
+        color: ${isCurrentUser || messageObj.userType === 'client' ? 'white' : '#1e293b'};
+      `;
+      
+      msgBubble.innerHTML = `
+        <div style="font-size: 13px; font-weight: 600; margin-bottom: 4px;">
+          ${messageObj.sender} (${messageObj.userType})
+        </div>
+        <div style="font-size: 14px; margin-bottom: 4px;">${messageObj.message}</div>
+        <div style="font-size: 11px; opacity: 0.7;">${messageObj.timestamp}</div>
+      `;
+      
+      el.appendChild(msgBubble);
+      container.appendChild(el);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function sendAdminChat() {
+      const input = document.getElementById('admin-chat-input');
+      const message = (input.value || '').trim();
+      if (!message) return;
+      
+      socket.emit('send_message', {
+        room: 'client_admin',
+        message: message,
+        userName: 'Admin',
+        userType: 'admin',
+        userEmail: 'admin@ereserve.com'
+      });
+      
+      input.value = '';
+      input.focus();
+    }
+
+    // DASHBOARD
+    function renderDashboard() {
+      const totalAdmin = adminState.admin.length;
+      const todayAttendance = adminState.attendance.filter(a => a.date === new Date().toISOString().split('T')[0]);
+      const presentToday = todayAttendance.filter(a => a.status === 'Present').length;
+      const absentToday = todayAttendance.filter(a => a.status === 'Absent').length;
+
+      contentArea.innerHTML = `
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon blue">👥</div>
+            <div class="stat-info">
+              <h3>${totalAdmin}</h3>
+              <p>Total Admin</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon green">✓</div>
+            <div class="stat-info">
+              <h3>${presentToday}</h3>
+              <p>Present Today</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon red">✕</div>
+            <div class="stat-info">
+              <h3>${absentToday}</h3>
+              <p>Absent Today</p>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon orange">📋</div>
+            <div class="stat-info">
+              <h3>${adminState.tasks.length}</h3>
+              <p>Pending Tasks</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+          <div class="card">
+            <h4>Attendance This Week</h4>
+            <div class="chart-container">
+              <canvas id="attendanceChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Staff by Position</h4>
+            <div class="chart-container">
+              <canvas id="positionChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Recent Activity</h4>
+          <div id="recentActivity"></div>
+        </div>
+      `;
+
+      setTimeout(() => {
+        renderAttendanceChart();
+        renderPositionChart();
+        renderRecentActivity();
+      }, 50);
+    }
+
+    function renderAttendanceChart() {
+      const canvas = document.getElementById('attendanceChart');
+      if (!canvas) return;
+
+      const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      const data = [15, 14, 16, 14, 15, 10, 8];
+
+      if (window._attendanceChart) window._attendanceChart.destroy();
+      window._attendanceChart = new Chart(canvas.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: days,
+          datasets: [{
+            label: 'Present',
+            data: data,
+            backgroundColor: 'rgba(34, 197, 94, 0.5)',
+            borderColor: 'rgb(34, 197, 94)',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: { legend: { display: false } },
+          scales: { y: { beginAtZero: true, ticks: { stepSize: 5 } } }
+        }
+      });
+    }
+
+    function renderPositionChart() {
+      const canvas = document.getElementById('positionChart');
+      if (!canvas) return;
+
+      const positions = {};
+      adminState.admin.forEach(s => {
+        positions[s.position] = (positions[s.position] || 0) + 1;
+      });
+
+      if (window._positionChart) window._positionChart.destroy();
+      window._positionChart = new Chart(canvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(positions),
+          datasets: [{
+            data: Object.values(positions),
+            backgroundColor: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#00f2fe', '#43e97b']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true
+        }
+      });
+    }
+
+    function renderRecentActivity() {
+      const container = document.getElementById('recentActivity');
+      const activities = [
+        `<div style="padding:0.75rem;border-bottom:1px solid var(--gray-200)">
+          <strong>Maria Santos</strong> marked present at 08:15 AM
+          <div style="color:#64748b;font-size:0.8rem;margin-top:0.25rem">${new Date().toLocaleDateString()}</div>
+        </div>`,
+        `<div style="padding:0.75rem;border-bottom:1px solid var(--gray-200)">
+          <strong>New Task</strong> assigned: Room 301 housekeeping
+          <div style="color:#64748b;font-size:0.8rem;margin-top:0.25rem">${new Date().toLocaleDateString()}</div>
+        </div>`,
+        `<div style="padding:0.75rem">
+          <strong>Schedule Updated</strong> for next week
+          <div style="color:#64748b;font-size:0.8rem;margin-top:0.25rem">${new Date().toLocaleDateString()}</div>
+        </div>`
+      ];
+      container.innerHTML = activities.join('');
+    }
+
+    // ADMIN PAGE
+    function renderAdminPage() {
+      contentArea.innerHTML = `
+        <div style="margin-bottom:1.5rem">
+          <button class="btn btn-primary" id="addAdminPageBtn">➕ Add Admin Member</button>
+        </div>
+
+        <div class="table-section">
+          <div class="table-header">ADMIN DIRECTORY</div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th><th>Name</th><th>Position</th><th>Email</th><th>Phone</th><th>Hire Date</th><th>Salary</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="adminTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('addAdminPageBtn').addEventListener('click', () => showAdminModal());
+      renderAdminTable();
+    }
+
+    function renderAdminTable() {
+      const tbody = document.getElementById('adminTableBody');
+      if (!tbody) return;
+
+      if (adminState.admin.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#64748b">No admin members found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = adminState.admin.map((s, i) => `
+        <tr>
+          <td>${i + 1}</td>
+          <td><strong>${escapeHtml(s.name)}</strong></td>
+          <td>${s.position}</td>
+          <td>${escapeHtml(s.email)}</td>
+          <td>${s.phone}</td>
+          <td>${s.hireDate}</td>
+          <td>₱${s.salary.toLocaleString()}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn btn-primary btn-sm" onclick="editAdmin(${i})">✏️</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteAdmin(${i})">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function showAdminModal(index = -1) {
+      document.getElementById('adminModal').classList.add('show');
+      document.getElementById('editingAdminIndex').value = index;
+      document.getElementById('adminModalTitle').textContent = index === -1 ? 'Add New Admin' : 'Edit Admin';
+
+      if (index > -1) {
+        const s = adminState.admin[index];
+        document.getElementById('adminFullName').value = s.name;
+        document.getElementById('adminPosition').value = s.position;
+        document.getElementById('adminEmail').value = s.email;
+        document.getElementById('adminPhone').value = s.phone;
+        document.getElementById('adminHireDate').value = s.hireDate;
+        document.getElementById('adminSalary').value = s.salary;
+        document.getElementById('adminAddress').value = s.address || '';
+      } else {
+        document.getElementById('adminForm').reset();
+      }
+    }
+
+    function closeAdminModal() {
+      document.getElementById('adminModal').classList.remove('show');
+    }
+
+    document.getElementById('saveAdminBtn').addEventListener('click', () => {
+      const idx = Number(document.getElementById('editingAdminIndex').value || -1);
+      const name = document.getElementById('adminFullName').value.trim();
+      const position = document.getElementById('adminPosition').value;
+      const email = document.getElementById('adminEmail').value.trim();
+      const phone = document.getElementById('adminPhone').value.trim();
+      const hireDate = document.getElementById('adminHireDate').value;
+      const salary = Number(document.getElementById('adminSalary').value || 0);
+      const address = document.getElementById('adminAddress').value.trim();
+
+      if (!name || !position || !email || !phone || !hireDate) {
+        showToast('Please fill all required fields');
+        return;
+      }
+
+      if (idx === -1) {
+        adminState.admin.push({
+          id: Date.now(),
+          name, position, email, phone, hireDate, salary, address, status: 'Active'
+        });
+        showToast('✅ Admin added successfully');
+      } else {
+        adminState.admin[idx] = { ...adminState.admin[idx], name, position, email, phone, hireDate, salary, address };
+        showToast('✅ Admin updated successfully');
+      }
+
+      persistState();
+      closeAdminModal();
+      const activePage = document.querySelector('.nav-item.active').dataset.page;
+      if (activePage === 'admin') renderAdminTable();
+    });
+
+    window.editAdmin = function(i) { showAdminModal(i); };
+    window.deleteAdmin = function(i) {
+      if (!confirm('Delete this admin member?')) return;
+      adminState.admin.splice(i, 1);
+      persistState();
+      renderAdminTable();
+      showToast('🗑️ Admin deleted');
+    };
+
+    document.getElementById('addAdminBtn').addEventListener('click', () => showAdminModal());
+
+    // ATTENDANCE PAGE
+    function renderAttendancePage() {
+      contentArea.innerHTML = `
+        <div style="margin-bottom:1.5rem">
+          <button class="btn btn-primary" id="recordAttendanceBtn">✓ Record Attendance</button>
+        </div>
+
+        <div class="table-section">
+          <div class="table-header">ATTENDANCE RECORDS</div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Admin Name</th><th>Date</th><th>Status</th><th>Time In</th><th>Time Out</th><th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="attendanceTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('recordAttendanceBtn').addEventListener('click', showAttendanceModal);
+      renderAttendanceTable();
+    }
+
+    function renderAttendanceTable() {
+      const tbody = document.getElementById('attendanceTableBody');
+      if (!tbody) return;
+
+      if (adminState.attendance.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#64748b">No attendance records</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = adminState.attendance.map((a, i) => {
+        const admin = adminState.admin.find(s => s.id === a.adminId);
+        return `
+          <tr>
+            <td><strong>${admin ? escapeHtml(admin.name) : 'Unknown'}</strong></td>
+            <td>${a.date}</td>
+            <td><span class="status-badge status-${a.status.toLowerCase()}">${a.status}</span></td>
+            <td>${a.timeIn || '-'}</td>
+            <td>${a.timeOut || '-'}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="deleteAttendance(${i})">🗑️</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function showAttendanceModal() {
+      const adminSelect = document.getElementById('attendanceAdmin');
+      adminSelect.innerHTML = '<option value="">Select Admin</option>' + 
+        adminState.admin.map(s => `<option value="${s.id}">${escapeHtml(s.name)}</option>`).join('');
+      
+      document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('attendanceModal').classList.add('show');
+    }
+
+    function closeAttendanceModal() {
+      document.getElementById('attendanceModal').classList.remove('show');
+    }
+
+    document.getElementById('saveAttendanceBtn').addEventListener('click', () => {
+      const adminId = Number(document.getElementById('attendanceAdmin').value);
+      const date = document.getElementById('attendanceDate').value;
+      const status = document.getElementById('attendanceStatus').value;
+      const timeIn = document.getElementById('attendanceTimeIn').value;
+      const timeOut = document.getElementById('attendanceTimeOut').value;
+      const notes = document.getElementById('attendanceNotes').value;
+
+      if (!adminId || !date || !status) {
+        showToast('Please fill required fields');
+        return;
+      }
+
+      adminState.attendance.push({
+        id: Date.now(),
+        adminId, date, status, timeIn, timeOut, notes
+      });
+
+      persistState();
+      closeAttendanceModal();
+      renderAttendanceTable();
+      showToast('✅ Attendance recorded');
+    });
+
+    window.deleteAttendance = function(i) {
+      if (!confirm('Delete this record?')) return;
+      adminState.attendance.splice(i, 1);
+      persistState();
+      renderAttendanceTable();
+      showToast('🗑️ Record deleted');
+    };
+
+    // SCHEDULE PAGE
+    function renderSchedulePage() {
+      contentArea.innerHTML = `
+        <div class="card">
+          <h4>Weekly Schedule</h4>
+          <div style="overflow-x:auto">
+            <table style="min-width:800px">
+              <thead>
+                <tr>
+                  <th>Admin</th><th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${adminState.admin.map(s => `
+                  <tr>
+                    <td><strong>${escapeHtml(s.name)}</strong></td>
+                    <td><span class="status-badge status-on-duty">08-17</span></td>
+                    <td><span class="status-badge status-on-duty">08-17</span></td>
+                    <td><span class="status-badge status-on-duty">14-23</span></td>
+                    <td><span class="status-badge status-off-duty">OFF</span></td>
+                    <td><span class="status-badge status-on-duty">08-17</span></td>
+                    <td><span class="status-badge status-on-duty">08-17</span></td>
+                    <td><span class="status-badge status-off-duty">OFF</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // TASKS PAGE
+    function renderTasksPage() {
+      contentArea.innerHTML = `
+        <div class="card">
+          <h4>Team Tasks</h4>
+          <div id="tasksContainer"></div>
+        </div>
+      `;
+
+      const container = document.getElementById('tasksContainer');
+      const tasks = [
+        { id: 1, title: 'Clean Room 301', assignedTo: 'Juan Reyes', dueDate: new Date().toISOString().split('T')[0], status: 'In Progress' },
+        { id: 2, title: 'Prepare Restaurant', assignedTo: 'Ana Garcia', dueDate: new Date().toISOString().split('T')[0], status: 'Pending' },
+        { id: 3, title: 'Check Inventory', assignedTo: 'Maria Santos', dueDate: new Date().toISOString().split('T')[0], status: 'Completed' },
+      ];
+
+      container.innerHTML = tasks.map(t => `
+        <div style="padding:1rem;border-bottom:1px solid var(--gray-200);display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <strong>${t.title}</strong>
+            <div style="color:#64748b;font-size:0.9rem;margin-top:0.25rem">Assigned to: ${t.assignedTo}</div>
+            <div style="color:#64748b;font-size:0.85rem">Due: ${t.dueDate}</div>
+          </div>
+          <span class="status-badge status-${t.status.toLowerCase()}">${t.status}</span>
+        </div>
+      `).join('');
+    }
+
+    // PERFORMANCE PAGE
+    function renderPerformancePage() {
+      contentArea.innerHTML = `
+        <div class="card">
+          <h4>Admin Performance Rating</h4>
+          <div style="overflow-x:auto">
+            <table style="min-width:600px">
+              <thead>
+                <tr>
+                  <th>Admin</th><th>Rating</th><th>Reviews</th><th>Feedback</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${adminState.admin.map(s => `
+                  <tr>
+                    <td><strong>${escapeHtml(s.name)}</strong></td>
+                    <td>⭐⭐⭐⭐⭐ (4.8)</td>
+                    <td>12</td>
+                    <td>Excellent performance</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // REPORTS PAGE
+    function renderReportsPage() {
+      contentArea.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem">
+          <div class="card">
+            <h4>Admin Turnover</h4>
+            <div class="chart-container">
+              <canvas id="turnoverChart"></canvas>
+            </div>
+          </div>
+          <div class="card">
+            <h4>Punctuality</h4>
+            <div class="chart-container">
+              <canvas id="punctualityChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h4>Monthly Attendance Report</h4>
+          <div id="monthlyReport"></div>
+        </div>
+      `;
+
+      setTimeout(() => {
+        renderTurnoverChart();
+        renderPunctualityChart();
+        renderMonthlyReport();
+      }, 50);
+    }
+
+    function renderTurnoverChart() {
+      const canvas = document.getElementById('turnoverChart');
+      if (!canvas) return;
+
+      if (window._turnoverChart) window._turnoverChart.destroy();
+      window._turnoverChart = new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+          datasets: [{
+            label: 'Admin Count',
+            data: [15, 16, 16, 17, 17, 18],
+            borderColor: '#667eea',
+            backgroundColor: 'rgba(102, 126, 234, 0.1)',
+            borderWidth: 2,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: { legend: { display: false } }
+        }
+      });
+    }
+
+    function renderPunctualityChart() {
+      const canvas = document.getElementById('punctualityChart');
+      if (!canvas) return;
+
+      if (window._punctualityChart) window._punctualityChart.destroy();
+      window._punctualityChart = new Chart(canvas.getContext('2d'), {
+        type: 'doughnut',
+        data: {
+          labels: ['On Time', 'Late', 'Absent'],
+          datasets: [{
+            data: [85, 10, 5],
+            backgroundColor: ['#22c55e', '#f59e0b', '#ef4444']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true
+        }
+      });
+    }
+
+    function renderMonthlyReport() {
+      const container = document.getElementById('monthlyReport');
+      container.innerHTML = `
+        <table style="width:100%">
+          <thead>
+            <tr style="background:var(--gray-100)">
+              <th style="padding:1rem;text-align:left">Metric</th>
+              <th style="padding:1rem;text-align:right">Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--gray-200)">
+              <td style="padding:1rem">Average Attendance Rate</td>
+              <td style="padding:1rem;text-align:right"><strong>92%</strong></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--gray-200)">
+              <td style="padding:1rem">On-Time Arrival Rate</td>
+              <td style="padding:1rem;text-align:right"><strong>95%</strong></td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--gray-200)">
+              <td style="padding:1rem">Average Performance Rating</td>
+              <td style="padding:1rem;text-align:right"><strong>4.7/5.0</strong></td>
+            </tr>
+            <tr>
+              <td style="padding:1rem">Leave Requests</td>
+              <td style="padding:1rem;text-align:right"><strong>3</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      `;
+    }
+
+    function handleLogout() {
+      if (confirm('Are you sure you want to logout?')) {
+        sessionStorage.removeItem('currentUser');
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Initialize
+    loadState();
+    renderDashboard();
+  </script>
+</body>
+</html>

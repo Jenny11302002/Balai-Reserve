@@ -1,0 +1,2161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rico Haw's Place - Tour & Adventure Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #ff6b35;
+      --primary-dark: #e85a2a;
+      --secondary: #00b4d8;
+      --secondary-dark: #0096c7;
+      --accent: #ffd23f;
+      --success: #06d6a0;
+      --danger: #ef476f;
+      --dark: #2b2d42;
+      --gray: #8d99ae;
+      --light: #edf2f4;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--dark);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section - Full Screen Landing */
+    .hero-landing {
+      position: relative;
+      min-height: 100vh;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
+                  url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      color: var(--white);
+    }
+
+    .hero-landing::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-logo {
+      font-size: 6rem;
+      margin-bottom: 1rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 800;
+      margin-bottom: 1rem;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+      opacity: 0.95;
+      font-weight: 400;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .cta-button {
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    .cta-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+    }
+
+    .cta-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(255,107,53,0.5);
+    }
+
+    .cta-secondary {
+      background: rgba(255,255,255,0.2);
+      color: var(--white);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .cta-secondary:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-3px);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+      font-size: 2rem;
+      opacity: 0.7;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
+    }
+
+    /* Features Section */
+    .features-section {
+      background: var(--white);
+      padding: 5rem 2rem;
+    }
+
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 1rem;
+    }
+
+    .section-description {
+      font-size: 1.1rem;
+      color: var(--gray);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border: 2px solid var(--light);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+      border-color: var(--primary);
+    }
+
+    .feature-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-description {
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      max-width: 900px;
+      margin: 2rem auto;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+      overflow: hidden;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .hero-header {
+      background: linear-gradient(135deg, rgba(255,107,53,0.95) 0%, rgba(232,90,42,0.95) 100%);
+      color: var(--white);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-header::before {
+      content: '🏝️';
+      position: absolute;
+      font-size: 10rem;
+      opacity: 0.1;
+      top: -2rem;
+      right: -1rem;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .hero-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .hero-header .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.95;
+      font-weight: 400;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .section-subtitle {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .tour-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .tour-card {
+      background: var(--white);
+      border: 2px solid var(--light);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .tour-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      border-color: var(--primary);
+    }
+
+    .tour-image {
+      height: 180px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tour-image::before {
+      content: attr(data-icon);
+      position: absolute;
+      font-size: 6rem;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.3;
+    }
+
+    .tour-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: var(--accent);
+      color: var(--dark);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .tour-body {
+      padding: 1.25rem;
+    }
+
+    .tour-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 0.4rem;
+    }
+
+    .tour-description {
+      color: var(--gray);
+      font-size: 0.85rem;
+      margin-bottom: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .tour-features {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .feature-tag {
+      background: var(--light);
+      color: var(--dark);
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    .form-section {
+      background: linear-gradient(135deg, rgba(248,249,250,0.8) 0%, rgba(233,236,239,0.8) 100%);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--dark);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .required {
+      color: var(--danger);
+    }
+
+    input, select, textarea {
+      padding: 0.8rem 1rem;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+    }
+
+    input.error, select.error {
+      border-color: var(--danger);
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .error-message {
+      color: var(--danger);
+      font-size: 0.75rem;
+      display: none;
+      font-weight: 600;
+    }
+
+    .btn {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      box-shadow: 0 6px 12px rgba(255,107,53,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(255,107,53,0.4);
+    }
+
+    .btn-secondary {
+      background: var(--light);
+      color: var(--dark);
+    }
+
+    .btn-secondary:hover {
+      background: #dee2e6;
+    }
+
+    .btn-admin {
+      background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+      color: var(--white);
+      box-shadow: 0 6px 12px rgba(0,180,216,0.3);
+    }
+
+    .btn-admin:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(0,180,216,0.4);
+    }
+
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-edit {
+      background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-dark) 100%);
+      color: var(--white);
+    }
+
+    .btn-edit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,180,216,0.3);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .alert {
+      padding: 1rem 1.25rem;
+      border-radius: 10px;
+      margin-top: 1.5rem;
+      display: none;
+      animation: slideDown 0.4s ease;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert-success {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      color: #065f46;
+      border-left: 4px solid var(--success);
+    }
+
+    .alert-error {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      color: #991b1b;
+      border-left: 4px solid var(--danger);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .booking-card {
+      background: var(--white);
+      border: 2px solid var(--light);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .booking-card:hover {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+      border-color: var(--primary);
+    }
+
+    .booking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .booking-id {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .status-badge {
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-confirmed {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .status-cancelled {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .booking-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .detail-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .detail-label {
+      font-size: 0.75rem;
+      color: var(--gray);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .detail-value {
+      font-size: 0.95rem;
+      color: var(--dark);
+      font-weight: 600;
+    }
+
+    .booking-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+
+      .hero-logo {
+        font-size: 4rem;
+      }
+
+      .cta-button {
+        padding: 0.8rem 2rem;
+        font-size: 1rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .hero-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .content {
+        padding: 1.5rem;
+      }
+
+      .tour-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .container {
+        max-width: 100%;
+      }
+
+      .booking-details {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Hero Landing Section -->
+  <div class="hero-landing" id="heroLanding">
+    <div class="hero-content">
+      <div class="hero-logo"></div>
+      <h1 class="hero-title">Rico Haw's Place</h1>
+      <p class="hero-subtitle">Your Gateway to Unforgettable Adventures</p>
+      <div class="hero-cta">
+        <button class="cta-button cta-primary" id="startBooking">
+          <span>🎫</span> Start Your Journey
+        </button>
+        <button class="cta-button cta-secondary" id="exploreMore">
+          <span>🔍</span> Explore Tours
+        </button>
+      </div>
+    </div>
+    <div class="scroll-indicator">↓</div>
+  </div>
+
+  <!-- Features Section -->
+  <div class="features-section" id="featuresSection">
+    <div class="features-container">
+      <div class="section-header">
+        <h2 class="section-title">Why Choose Rico Haw's Place?</h2>
+        <p class="section-description">Experience premium tour services with unmatched quality, convenience, and unforgettable memories</p>
+      </div>
+      
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3 class="feature-title">Premium Experiences</h3>
+          <p class="feature-description">Carefully curated tours designed to create lasting memories and authentic local experiences</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3 class="feature-title">Expert Guides</h3>
+          <p class="feature-description">Professional and friendly guides who know every secret spot and hidden gem</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3 class="feature-title">Easy Booking</h3>
+          <p class="feature-description">Simple, fast, and secure reservation system accessible anytime, anywhere</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3 class="feature-title">Best Value</h3>
+          <p class="feature-description">Competitive pricing with transparent costs and no hidden fees</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3 class="feature-title">Safe & Secure</h3>
+          <p class="feature-description">Your safety is our priority with comprehensive insurance and safety protocols</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon"></div>
+          <h3 class="feature-title">5-Star Service</h3>
+          <p class="feature-description">Consistently rated excellent by thousands of satisfied travelers</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Welcome Screen -->
+  <div class="container hidden" id="welcomeScreen">
+    <div class="hero-header">
+      <h1>🏝️ Rico Haw's Place</h1>
+      <p class="subtitle">Premium Tours & Adventure Experiences</p>
+    </div>
+    <div class="content">
+      <h2 class="section-title">Choose Your Experience</h2>
+      <p class="section-subtitle">Select from our curated tour packages or manage bookings</p>
+      
+      <div class="tour-grid">
+        <div class="tour-card" id="guestBooking">
+          <div class="tour-image" data-icon="🎫" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);">
+            <div class="tour-badge">Popular</div>
+          </div>
+          <div class="tour-body">
+            <h3 class="tour-title">Book Your Tour</h3>
+            <p class="tour-description">Reserve your spot for an unforgettable adventure</p>
+            <div class="tour-features">
+              <span class="feature-tag"> Easy Booking</span>
+              <span class="feature-tag"> Mobile Friendly</span>
+              <span class="feature-tag"> Instant</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tour-card" id="clientPortal">
+          <div class="tour-image" data-icon="👤" style="background: linear-gradient(135deg, #06d6a0 0%, #00916e 100%);">
+            <div class="tour-badge">Client</div>
+          </div>
+          <div class="tour-body">
+            <h3 class="tour-title">My Bookings</h3>
+            <p class="tour-description">View and manage your reservations</p>
+            <div class="tour-features">
+              <span class="feature-tag"> View Bookings</span>
+              <span class="feature-tag"> Edit Details</span>
+              <span class="feature-tag">Updates</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tour-card" id="adminPortal">
+          <div class="tour-image" data-icon="🔐" style="background: linear-gradient(135deg, #00b4d8 0%, #0077b6 100%);">
+            <div class="tour-badge">Admin</div>
+          </div>
+          <div class="tour-body">
+            <h3 class="tour-title">Management Portal</h3>
+            <p class="tour-description">Access booking dashboard with analytics</p>
+            <div class="tour-features">
+              <span class="feature-tag"> Analytics</span>
+              <span class="feature-tag"> Full Control</span>
+              <span class="feature-tag"> Secure</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tour-card" id="staffPortal">
+          <div class="tour-image" data-icon="👨‍💼" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+            <div class="tour-badge">Staff</div>
+          </div>
+          <div class="tour-body">
+            <h3 class="tour-title">Check-in/Out</h3>
+            <p class="tour-description">Manage guest check-ins and check-outs</p>
+            <div class="tour-features">
+              <span class="feature-tag"> Real-time</span>
+              <span class="feature-tag"> Guest List</span>
+              <span class="feature-tag"> Track Status</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guest Booking Form -->
+  <div class="container hidden" id="guestForm">
+    <div class="hero-header">
+      <h1>🎫 Book Your Adventure</h1>
+      <p class="subtitle">Complete the form to secure your reservation</p>
+    </div>
+    <div class="content">
+      <div class="form-section">
+        <h2 class="section-title">📋 Reservation Details</h2>
+        <p class="section-subtitle">Please provide accurate information for your booking</p>
+        
+        <form id="bookingForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name <span class="required">*</span></label>
+              <input type="text" id="name" placeholder="Juan Dela Cruz" required>
+              <span class="error-message" id="nameError">Please enter a valid name</span>
+            </div>
+
+            <div class="form-group">
+              <label>Contact Number <span class="required">*</span></label>
+              <input type="tel" id="contact" placeholder="09171234567" pattern="[0-9]{11}" required>
+              <span class="error-message" id="contactError">Enter valid 11-digit number</span>
+            </div>
+
+            <div class="form-group">
+              <label>Email Address <span class="required">*</span></label>
+              <input type="email" id="email" placeholder="juan@example.com" required>
+              <span class="error-message" id="emailError">Enter valid email address</span>
+            </div>
+
+            <div class="form-group">
+              <label>Create Password <span class="required">*</span></label>
+              <input type="password" id="bookPassword" placeholder="Create a secure password" required>
+              <span class="error-message" id="passwordError">Password must be at least 6 characters</span>
+            </div>
+
+            <div class="form-group">
+              <label>Tour Date <span class="required">*</span></label>
+              <input type="date" id="date" required>
+              <span class="error-message" id="dateError">Select a future date</span>
+            </div>
+
+            <div class="form-group">
+              <label>Arrival Time <span class="required">*</span></label>
+              <input type="time" id="time" value="09:00" required>
+            </div>
+
+            <div class="form-group">
+              <label>Number of Guests <span class="required">*</span></label>
+              <input type="number" id="guests" min="1" max="50" placeholder="4" required onchange="updateGuestForm()">
+            </div>
+
+            <!-- Guest Names Section -->
+            <div class="form-group full-width" id="guestNamesSection" style="display: none;">
+              <label>Guest Names <span class="required">*</span></label>
+              <div id="guestInputs"></div>
+              <button type="button" class="btn btn-secondary btn-small" onclick="addGuestField()" style="margin-top: 0.5rem;">
+                <span>+</span> Add Guest Name
+              </button>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Tour Package <span class="required">*</span></label>
+              <select id="package" required>
+                <option value="">Select Tour Package</option>
+                <option value="cottage1">Cottage 1 - ₱500/person</option>
+                <option value="cottage2">Cottage 2 - ₱1,000/person</option>
+                <option value="cottage3">Cottage 3 - ₱1,500/person</option>
+                <option value="room1">Room 1 - ₱2,000/person</option>
+                <option value="room2">Room 2 - ₱2,500/person</option>
+                <option value="room3">Room 3 - ₱3,000/person</option>
+                
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Special Requests (Optional)</label>
+              <textarea id="requests" rows="2" placeholder="Dietary requirements, accessibility needs, special occasions, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary" type="submit">
+              <span>✓</span> Confirm Booking
+            </button>
+            <button class="btn btn-secondary" type="button" id="backToHome1">
+              <span>←</span> Back to Home
+            </button>
+          </div>
+        </form>
+        <div class="alert" id="confirmMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Login -->
+  <div class="container hidden" id="clientLogin">
+    <div class="hero-header">
+      <h1> Client Portal</h1>
+      <p class="subtitle">Access your bookings and reservations</p>
+    </div>
+    <div class="content">
+      <div class="form-section">
+        <h2 class="section-title"> Client Login</h2>
+        <p class="section-subtitle">Enter your email to view your bookings</p>
+        
+        <form id="clientForm">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label>Email Address <span class="required">*</span></label>
+              <input type="email" id="clientEmail" placeholder="Enter your registered email" required>
+            </div>
+            <div class="form-group full-width">
+              <label>Password <span class="required">*</span></label>
+              <input type="password" id="clientPassword" placeholder="Enter your password" required>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary" type="submit">
+              <span>→</span> View My Bookings
+            </button>
+            <button class="btn btn-secondary" type="button" id="backToHome3">
+              <span>←</span> Back to Home
+            </button>
+          </div>
+        </form>
+        <div class="alert" id="clientMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client Dashboard -->
+  <div class="container hidden" id="clientDashboard">
+    <div class="hero-header">
+      <h1>My Bookings</h1>
+      <p class="subtitle" id="clientWelcome">Welcome back!</p>
+    </div>
+    <div class="content">
+      <div style="margin-bottom: 1.5rem;">
+        <button class="btn btn-secondary btn-small" type="button" id="clientLogout">
+          <span>←</span> Logout
+        </button>
+      </div>
+
+      <div id="clientBookingsList"></div>
+      
+      <div id="noBookings" class="hidden" style="text-align: center; padding: 3rem 1rem;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;"></div>
+        <h3 style="color: var(--gray); margin-bottom: 0.5rem;">No Bookings Found</h3>
+        <p style="color: var(--gray); font-size: 0.9rem;">You don't have any bookings yet. Start exploring our tours!</p>
+        <button class="btn btn-primary btn-small" style="margin-top: 1.5rem;" id="bookNow">
+          <span></span> Book a Tour
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Booking Modal -->
+  <div class="container hidden" id="editBookingScreen">
+    <div class="hero-header">
+      <h1>Edit Booking</h1>
+      <p class="subtitle">Update your reservation details</p>
+    </div>
+    <div class="content">
+      <div class="form-section">
+        <h2 class="section-title"> Booking Information</h2>
+        <p class="section-subtitle" id="editBookingId"></p>
+        
+        <form id="editBookingForm">
+          <input type="hidden" id="editBookingIdValue">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name <span class="required">*</span></label>
+              <input type="text" id="editName" placeholder="Juan Dela Cruz" required>
+            </div>
+
+            <div class="form-group">
+              <label>Contact Number <span class="required">*</span></label>
+              <input type="tel" id="editContact" placeholder="09171234567" pattern="[0-9]{11}" required>
+            </div>
+
+            <div class="form-group">
+              <label>Email Address <span class="required">*</span></label>
+              <input type="email" id="editEmail" placeholder="juan@example.com" required>
+            </div>
+
+            <div class="form-group">
+              <label>Tour Date <span class="required">*</span></label>
+              <input type="date" id="editDate" required>
+            </div>
+
+            <div class="form-group">
+              <label>Arrival Time <span class="required">*</span></label>
+              <input type="time" id="editTime" required>
+            </div>
+
+            <div class="form-group">
+              <label>Number of Guests <span class="required">*</span></label>
+              <input type="number" id="editGuests" min="1" max="50" required>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Tour Package <span class="required">*</span></label>
+              <select id="editPackage" required>
+                <option value="">Select  Package</option>
+                <option value="cottage1">Cottage 1 - ₱500/person</option>
+                <option value="cottage2">Cottage 2 - ₱1,000/person</option>
+                <option value="cottage3">Cottage 3 - ₱1,500/person</option>
+                <option value="room1">Room 1 - ₱2,000/person</option>
+                <option value="room2">Room 2 - ₱2,500/person</option>
+                <option value="room3">Room 3 - ₱3,000/person</option>
+              </select>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Special Requests (Optional)</label>
+              <textarea id="editRequests" rows="2" placeholder="Dietary requirements, accessibility needs, special occasions, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary btn-small" type="submit">
+              <span>✓</span> Save Changes
+            </button>
+            <button class="btn btn-secondary btn-small" type="button" id="cancelEdit">
+              <span>✕</span> Cancel
+            </button>
+          </div>
+        </form>
+        <div class="alert" id="editMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Staff Login -->
+  <div class="container hidden" id="staffLogin">
+    <div class="hero-header">
+      <h1>Staff Portal</h1>
+      <p class="subtitle">Access guest check-in and check-out</p>
+    </div>
+    <div class="content">
+      <div class="form-section">
+        <h2 class="section-title">Staff Login</h2>
+        <p class="section-subtitle">Enter your credentials to access the system</p>
+        
+        <form id="staffLoginForm">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label>Staff ID <span class="required">*</span></label>
+              <input type="text" id="staffId" placeholder="Enter your staff ID" required>
+            </div>
+
+            <div class="form-group full-width">
+              <label>Password <span class="required">*</span></label>
+              <input type="password" id="staffPassword" placeholder="Enter your password" required>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-primary" type="submit">
+              <span>→</span> Login
+            </button>
+            <button class="btn btn-secondary" type="button" id="backToHome4">
+              <span>←</span> Back to Home
+            </button>
+          </div>
+        </form>
+        <div class="alert" id="staffMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Staff Dashboard -->
+  <div class="container hidden" id="staffDashboard">
+    <div class="hero-header">
+      <h1>Staff Management Portal</h1>
+      <p class="subtitle">Real-time Guest Check-in & Check-out System</p>
+    </div>
+    <div class="content">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div style="background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb;">
+          <p style="font-size: 0.85rem; opacity: 0.9; letter-spacing: 0.05em; font-weight: 500;">CHECKED IN</p>
+          <p style="font-size: 2.5rem; font-weight: 700; margin: 0.5rem 0;" id="checkedInCount">0</p>
+          <p style="font-size: 0.85rem; opacity: 0.8; margin: 0;">Guests checked in today</p>
+        </div>
+        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb;">
+          <p style="font-size: 0.85rem; opacity: 0.9; letter-spacing: 0.05em; font-weight: 500;">PENDING</p>
+          <p style="font-size: 2.5rem; font-weight: 700; margin: 0.5rem 0;" id="pendingCount">0</p>
+          <p style="font-size: 0.85rem; opacity: 0.8; margin: 0;">Awaiting check-in</p>
+        </div>
+        <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb;">
+          <p style="font-size: 0.85rem; opacity: 0.9; letter-spacing: 0.05em; font-weight: 500;">CHECKED OUT</p>
+          <p style="font-size: 2.5rem; font-weight: 700; margin: 0.5rem 0;" id="checkedOutCount">0</p>
+          <p style="font-size: 0.85rem; opacity: 0.8; margin: 0;">Guests checked out</p>
+        </div>
+        <div style="background: linear-gradient(135deg, #06d6a0 0%, #059669 100%); color: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb;">
+          <p style="font-size: 0.85rem; opacity: 0.9; letter-spacing: 0.05em; font-weight: 500;">CURRENT TIME</p>
+          <p style="font-size: 1.8rem; font-weight: 700; margin: 0.5rem 0; font-family: 'Courier New', monospace;" id="currentTime">00:00:00</p>
+          <p style="font-size: 0.85rem; opacity: 0.8; margin: 0;">Real-time updates</p>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 2rem;">
+        <button class="btn btn-secondary btn-small" type="button" id="staffLogout">
+          <span>←</span> Logout
+        </button>
+      </div>
+
+      <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 2rem;">
+        <h3 style="margin-bottom: 1rem; color: #2b2d42;">Search & Filter Guests</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <input type="text" id="staffSearchGuests" placeholder="Search by guest name or email..." style="padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 6px; font-family: inherit;">
+          <select id="staffFilterStatus" style="padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 6px; font-family: inherit;">
+            <option value="">All Status</option>
+            <option value="checked-in">Checked In</option>
+            <option value="checked-out">Checked Out</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="staffBookingsList"></div>
+
+      <div id="noStaffBookings" class="hidden" style="text-align: center; padding: 3rem 1rem; background: white; border-radius: 8px; border: 1px dashed #d1d5db;">
+        <h3 style="color: #6b7280; margin-bottom: 0.5rem;">No Bookings Available</h3>
+        <p style="color: #9ca3af; font-size: 0.9rem;">There are no bookings to display at this moment.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Login -->
+  <div class="container hidden" id="adminLogin">
+    <div class="hero-header">
+      <h1> Admin Access</h1>
+      <p class="subtitle">Secure portal for booking management</p>
+    </div>
+    <div class="content">
+      <div class="form-section">
+        <h2 class="section-title"> Administrator Login</h2>
+        <p class="section-subtitle">Enter your credentials to access the dashboard</p>
+        
+        <form id="adminForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Username</label>
+              <input type="text" id="adminUser" placeholder="Enter username" required>
+            </div>
+
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" id="adminPass" placeholder="Enter password" required>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button class="btn btn-admin" type="submit">
+              <span>→</span> Access Dashboard
+            </button>
+            <button class="btn btn-secondary" type="button" id="backToHome2">
+              <span>←</span> Back to Home
+            </button>
+          </div>
+        </form>
+        <div class="alert" id="adminMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // CRITICAL: Shared localStorage key - must match dashboard.html
+    const STORAGE_KEY = 'ereserve_data_v1';
+
+    const screens = {
+      hero: document.getElementById('heroLanding'),
+      features: document.getElementById('featuresSection'),
+      welcome: document.getElementById('welcomeScreen'),
+      guest: document.getElementById('guestForm'),
+      login: document.getElementById('adminLogin'),
+      clientLogin: document.getElementById('clientLogin'),
+      clientDashboard: document.getElementById('clientDashboard'),
+      editBooking: document.getElementById('editBookingScreen'),
+      staffLogin: document.getElementById('staffLogin'),
+      staffDashboard: document.getElementById('staffDashboard')
+    };
+
+    let currentClientEmail = null;
+    let currentStaffId = null;
+    let editingBookingId = null;
+
+    const packagePrices = {
+      cottage1: 500,
+      cottage2: 1000,
+      cottage3: 1500,
+      room1: 2000,
+      room2: 2500,
+      room3: 3000
+    };
+
+    const packageToRoomType = {
+      island: 'Island Hopping Tour',
+      adventure: 'Mountain Adventure',
+      beach: 'Beach Paradise Package',
+      diving: 'Diving & Snorkeling',
+      cultural: 'Cultural Heritage Tour',
+      sunset: 'Sunset Cruise'
+    };
+
+    // Guest management functions
+    window.updateGuestForm = function() {
+      const numGuests = parseInt(document.getElementById('guests').value) || 0;
+      const guestSection = document.getElementById('guestNamesSection');
+      const guestInputs = document.getElementById('guestInputs');
+      
+      if (numGuests === 0) {
+        guestSection.style.display = 'none';
+        guestInputs.innerHTML = '';
+        return;
+      }
+      
+      guestSection.style.display = 'block';
+      let html = '';
+      
+      for (let i = 1; i <= numGuests; i++) {
+        html += `
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <input type="text" class="guestName" placeholder="Guest ${i} Name" style="flex: 1; padding: 0.5rem; border: 1px solid #ddd; border-radius: 8px;">
+          </div>
+        `;
+      }
+      
+      guestInputs.innerHTML = html;
+    };
+
+    window.addGuestField = function() {
+      const currentGuests = parseInt(document.getElementById('guests').value) || 0;
+      if (currentGuests < 50) {
+        document.getElementById('guests').value = currentGuests + 1;
+        updateGuestForm();
+      }
+    };
+
+    // Get guest names from form
+    window.getGuestNames = function() {
+      const guestInputs = document.querySelectorAll('.guestName');
+      const guestNames = [];
+      guestInputs.forEach(input => {
+        const name = input.value.trim();
+        if (name) {
+          guestNames.push(name);
+        }
+      });
+      return guestNames;
+    };
+
+    // Landing page navigation
+    document.getElementById('startBooking').addEventListener('click', () => showScreen('welcome'));
+    document.getElementById('exploreMore').addEventListener('click', () => {
+      document.getElementById('featuresSection').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // Navigation
+    document.getElementById('guestBooking').addEventListener('click', () => showScreen('guest'));
+    document.getElementById('adminPortal').addEventListener('click', () => showScreen('login'));
+    document.getElementById('clientPortal').addEventListener('click', () => showScreen('clientLogin'));
+    document.getElementById('staffPortal').addEventListener('click', () => showScreen('staffLogin'));
+    document.getElementById('backToHome1').addEventListener('click', () => showScreen('welcome'));
+    document.getElementById('backToHome2').addEventListener('click', () => showScreen('welcome'));
+    document.getElementById('backToHome3').addEventListener('click', () => showScreen('welcome'));
+    document.getElementById('backToHome4').addEventListener('click', () => showScreen('welcome'));
+    document.getElementById('clientLogout').addEventListener('click', () => {
+      currentClientEmail = null;
+      showScreen('welcome');
+    });
+    document.getElementById('staffLogout').addEventListener('click', () => {
+      currentStaffId = null;
+      showScreen('welcome');
+    });
+    document.getElementById('cancelEdit').addEventListener('click', () => showScreen('clientDashboard'));
+    document.getElementById('bookNow').addEventListener('click', () => showScreen('guest'));
+
+    function showScreen(screen) {
+      Object.values(screens).forEach(s => s.classList.add('hidden'));
+      screens[screen].classList.remove('hidden');
+      window.scrollTo(0, 0);
+    }
+
+    // Set minimum date to today
+    const dateInput = document.getElementById('date');
+    const editDateInput = document.getElementById('editDate');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.setAttribute('min', today);
+    editDateInput.setAttribute('min', today);
+
+    // Validation functions
+    function validatePhone(phone) {
+      return /^[0-9]{11}$/.test(phone);
+    }
+
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validateDate(date) {
+      const selected = new Date(date);
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      return selected >= now;
+    }
+
+    function showError(inputId, errorId) {
+      document.getElementById(inputId).classList.add('error');
+      document.getElementById(errorId).style.display = 'block';
+    }
+
+    function hideErrors() {
+      document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+      document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+    }
+
+    // Clear errors on input
+    ['name', 'contact', 'email', 'date'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('input', () => {
+          el.classList.remove('error');
+          const errorEl = document.getElementById(id + 'Error');
+          if (errorEl) errorEl.style.display = 'none';
+        });
+      }
+    });
+
+    // Load or initialize dashboard data
+    function loadDashboardState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        try {
+          return JSON.parse(raw);
+        } catch (e) {
+          console.error('Failed to parse state', e);
+        }
+      }
+      
+      // Initialize with default structure
+      return {
+        bookings: [],
+        rooms: [],
+        customers: [],
+        settings: {
+          hotelName: "Rico Haw's Place",
+          address: "Unknown",
+          contact: "0917-000-0000",
+          darkMode: false
+        }
+      };
+    }
+
+    function saveDashboardState(state) {
+      try {
+        const jsonStr = JSON.stringify(state);
+        localStorage.setItem(STORAGE_KEY, jsonStr);
+        console.log('✓ Data saved to localStorage with key:', STORAGE_KEY);
+        console.log('Total bookings saved:', state.bookings.length);
+        console.log('Bookings:', state.bookings);
+        
+        // Verify it was saved
+        const verify = localStorage.getItem(STORAGE_KEY);
+        console.log('✓ Verification - Data retrieved from localStorage:', JSON.parse(verify).bookings.length, 'bookings');
+      } catch (error) {
+        console.error('ERROR saving to localStorage:', error);
+      }
+    }
+
+    function generateBookingId(state) {
+      const max = state.bookings.reduce((acc, b) => {
+        const num = parseInt(b.id.replace(/\D/g, '')) || 0;
+        return Math.max(acc, num);
+      }, 10000);
+      return 'BK' + (max + 1);
+    }
+
+    // Save booking to dashboard
+    function saveToDashboard(booking) {
+      try {
+        let state = loadDashboardState();
+
+        // Generate booking ID
+        const bookingId = generateBookingId(state);
+
+        // Calculate nights and checkout date
+        const checkinDate = new Date(booking.date);
+        const checkoutDate = new Date(checkinDate);
+        checkoutDate.setDate(checkoutDate.getDate() + 1);
+        const checkoutStr = checkoutDate.toISOString().split('T')[0];
+
+        // Add booking to dashboard
+        const dashboardBooking = {
+          id: bookingId,
+          guest: booking.name,
+          contact: booking.contact,
+          email: booking.email.toLowerCase(),
+          password: booking.password,
+          room: booking.roomType || booking.room,
+          checkin: booking.date,
+          checkout: checkoutStr,
+          guests: booking.guests,
+          guestNames: booking.guestNames || [],
+          time: booking.time,
+          requests: booking.requests,
+          amount: booking.total,
+          status: 'Pending',
+          timestamp: new Date().toISOString()
+        };
+
+        console.log('Dashboard booking being saved:', dashboardBooking);
+        state.bookings.push(dashboardBooking);
+        console.log('Total bookings in state:', state.bookings.length);
+
+        // Add or update customer
+        let customer = state.customers.find(c => c.email === booking.email.toLowerCase());
+        if (!customer) {
+          state.customers.push({
+            name: booking.name,
+            email: booking.email.toLowerCase(),
+            phone: booking.contact,
+            notes: '',
+            bookings: [bookingId]
+          });
+        } else {
+          customer.bookings = customer.bookings || [];
+          if (!customer.bookings.includes(bookingId)) {
+            customer.bookings.push(bookingId);
+          }
+        }
+
+        // Save back to localStorage
+        saveDashboardState(state);
+        console.log('State saved to localStorage');
+        return bookingId;
+      } catch (error) {
+        console.error('Error saving to dashboard:', error);
+        return null;
+      }
+    }
+
+    // Handle booking form submission
+    document.getElementById('bookingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      hideErrors();
+
+      const formData = {
+        name: document.getElementById('name').value.trim(),
+        contact: document.getElementById('contact').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('bookPassword').value,
+        date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        guests: parseInt(document.getElementById('guests').value),
+        guestNames: getGuestNames(),
+        package: document.getElementById('package').value,
+        requests: document.getElementById('requests').value.trim()
+      };
+
+      console.log('===== BOOKING FORM DEBUG =====');
+      console.log('Form data:', formData);
+      console.log('Password length:', formData.password.length);
+      console.log('Password value:', formData.password);
+      console.log('Guest names:', formData.guestNames);
+
+      let isValid = true;
+
+      if (formData.name.length < 2) {
+        showError('name', 'nameError');
+        isValid = false;
+      }
+
+      if (!validatePhone(formData.contact)) {
+        showError('contact', 'contactError');
+        isValid = false;
+      }
+
+      if (!validateEmail(formData.email)) {
+        showError('email', 'emailError');
+        isValid = false;
+      }
+
+      if (formData.password.length < 6) {
+        showError('bookPassword', 'passwordError');
+        isValid = false;
+      }
+
+      if (!validateDate(formData.date)) {
+        showError('date', 'dateError');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      const pricePerPerson = packagePrices[formData.package] || 0;
+      const total = pricePerPerson * formData.guests;
+      const packageSelect = document.getElementById('package');
+      const packageText = packageSelect.options[packageSelect.selectedIndex].text;
+
+      const booking = {
+        name: formData.name,
+        contact: formData.contact,
+        email: formData.email.toLowerCase(),
+        password: formData.password,
+        date: formData.date,
+        time: formData.time,
+        guests: formData.guests,
+        guestNames: formData.guestNames,
+        package: formData.package,
+        roomType: packageToRoomType[formData.package] || packageText.split(' - ')[0],
+        total: total,
+        requests: formData.requests,
+        timestamp: new Date().toISOString()
+      };
+
+      // Save to dashboard
+      const bookingId = saveToDashboard(booking);
+      console.log('Booking saved with ID:', bookingId);
+      console.log('Booking data:', booking);
+
+      // Show confirmation
+      const confirmMessage = document.getElementById('confirmMessage');
+      confirmMessage.className = 'alert alert-success';
+      confirmMessage.style.display = 'block';
+      confirmMessage.innerHTML = `
+        <strong>✓ Booking Confirmed!</strong><br>
+        ${bookingId ? `Transaction ID: <strong>${bookingId}</strong><br>` : ''}
+        ${formData.guests} guest(s) • Total: <strong>₱${total.toLocaleString()}</strong><br>
+        Tour Date: ${formData.date} at ${formData.time}<br>
+        Package: ${packageText.split(' - ')[0]}<br>
+        <small style="margin-top:0.5rem;display:block;">✅ Your booking has been saved! Use your email and password in the Client Portal to view your booking details.</small>
+      `;
+
+      e.target.reset();
+      document.getElementById('time').value = '09:00';
+      
+      setTimeout(() => {
+        confirmMessage.style.display = 'none';
+      }, 8000);
+    });
+
+    // Handle client login
+    document.getElementById('clientForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('clientEmail').value.trim().toLowerCase();
+      const password = document.getElementById('clientPassword').value;
+      
+      console.log('===== CLIENT LOGIN DEBUG =====');
+      console.log('Looking for storage key:', STORAGE_KEY);
+      console.log('Login attempt with email:', email);
+      console.log('Password entered (length ' + password.length + '):', password);
+      
+      const state = loadDashboardState();
+      console.log('All bookings in system:', state.bookings);
+      console.log('Total bookings found:', state.bookings.length);
+      
+      if (state.bookings.length === 0) {
+        console.log('⚠️ WARNING: No bookings in system at all!');
+      }
+      
+      const clientBooking = state.bookings.find(b => {
+        const bookingEmail = b.email ? b.email.toLowerCase() : '';
+        console.log('Checking booking with email:', bookingEmail, '- Matches?', bookingEmail === email);
+        return bookingEmail === email;
+      });
+      
+      console.log('Found booking:', clientBooking);
+      
+      if (!clientBooking) {
+        console.log('ERROR: No booking found for email:', email);
+        const clientMessage = document.getElementById('clientMessage');
+        clientMessage.className = 'alert alert-error';
+        clientMessage.style.display = 'block';
+        clientMessage.textContent = '✗ No bookings found for this email address.';
+        
+        setTimeout(() => {
+          clientMessage.style.display = 'none';
+        }, 3000);
+      } else if (clientBooking.password !== password) {
+        console.log('ERROR: Password mismatch!');
+        console.log('Stored password (length ' + clientBooking.password.length + '):', clientBooking.password);
+        console.log('Entered password (length ' + password.length + '):', password);
+        console.log('Are they equal?', clientBooking.password === password);
+        
+        const clientMessage = document.getElementById('clientMessage');
+        clientMessage.className = 'alert alert-error';
+        clientMessage.style.display = 'block';
+        clientMessage.textContent = '✗ Incorrect password. Please try again.';
+        
+        setTimeout(() => {
+          clientMessage.style.display = 'none';
+        }, 3000);
+      } else {
+        console.log('✓ LOGIN SUCCESSFUL!');
+        currentClientEmail = email;
+        displayClientBookings();
+        showScreen('clientDashboard');
+      }
+      
+      e.target.reset();
+    });
+
+    // Display client bookings
+    function displayClientBookings() {
+      const state = loadDashboardState();
+      console.log('displayClientBookings - currentClientEmail:', currentClientEmail);
+      console.log('displayClientBookings - All bookings:', state.bookings);
+      
+      const clientBookings = state.bookings.filter(b => 
+        b.email && b.email.toLowerCase() === currentClientEmail
+      );
+      console.log('displayClientBookings - Filtered bookings:', clientBookings);
+      
+      const customerName = clientBookings[0]?.guest || 'Guest';
+      document.getElementById('clientWelcome').textContent = `Welcome back, ${customerName}!`;
+      
+      const container = document.getElementById('clientBookingsList');
+      const noBookings = document.getElementById('noBookings');
+      
+      if (clientBookings.length === 0) {
+        container.innerHTML = '';
+        noBookings.classList.remove('hidden');
+        return;
+      }
+      
+      noBookings.classList.add('hidden');
+      
+      // Sort by date (newest first)
+      clientBookings.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      container.innerHTML = clientBookings.map(booking => {
+        const statusClass = `status-${booking.status.toLowerCase()}`;
+        const packageName = booking.room || 'Tour Package';
+        
+        return `
+          <div class="booking-card">
+            <div class="booking-header">
+              <div class="booking-id">Booking #${booking.id}</div>
+              <span class="status-badge ${statusClass}">${booking.status}</span>
+            </div>
+            
+            <div class="booking-details">
+              <div class="detail-item">
+                <span class="detail-label">Tour Package</span>
+                <span class="detail-value">🎫 ${packageName}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Date</span>
+                <span class="detail-value">📅 ${booking.checkin}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Time</span>
+                <span class="detail-value">⏰ ${booking.time || 'N/A'}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Guests</span>
+                <span class="detail-value">👥 ${booking.guests}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Total Amount</span>
+                <span class="detail-value">💰 ₱${booking.amount.toLocaleString()}</span>
+              </div>
+              <div class="detail-item">
+                <span class="detail-label">Contact</span>
+                <span class="detail-value">📞 ${booking.contact}</span>
+              </div>
+            </div>
+            
+            ${booking.guestNames && booking.guestNames.length > 0 ? `
+              <div style="margin-bottom: 1rem; padding: 0.75rem; background: var(--light); border-radius: 8px;">
+                <div class="detail-label" style="margin-bottom: 0.5rem;">👥 Guest Names</div>
+                <div style="font-size: 0.85rem; color: var(--dark);">
+                  ${booking.guestNames.map((name, idx) => `<div>• ${name}</div>`).join('')}
+                </div>
+              </div>
+            ` : ''}
+            
+            ${booking.requests ? `
+              <div style="margin-bottom: 1rem; padding: 0.75rem; background: var(--light); border-radius: 8px;">
+                <div class="detail-label" style="margin-bottom: 0.25rem;">Special Requests</div>
+                <div style="font-size: 0.85rem; color: var(--dark);">${booking.requests}</div>
+              </div>
+            ` : ''}
+            
+            <div class="booking-actions">
+              <button class="btn btn-edit btn-small" onclick="editBooking('${booking.id}')">
+                <span>✏️</span> Edit Booking
+              </button>
+              <button class="btn btn-danger btn-small" onclick="cancelClientBooking('${booking.id}')">
+                <span>✗</span> Cancel Booking
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Edit booking function
+    window.editBooking = function(bookingId) {
+      const state = loadDashboardState();
+      const booking = state.bookings.find(b => b.id === bookingId);
+      
+      if (!booking) {
+        alert('Booking not found');
+        return;
+      }
+      
+      editingBookingId = bookingId;
+      
+      // Populate form
+      document.getElementById('editBookingIdValue').value = bookingId;
+      document.getElementById('editBookingId').textContent = `Booking ID: ${bookingId}`;
+      document.getElementById('editName').value = booking.guest;
+      document.getElementById('editContact').value = booking.contact;
+      document.getElementById('editEmail').value = booking.email;
+      document.getElementById('editDate').value = booking.checkin;
+      document.getElementById('editTime').value = booking.time || '09:00';
+      document.getElementById('editGuests').value = booking.guests;
+      document.getElementById('editRequests').value = booking.requests || '';
+      
+      // Set package - match by room name
+      const packageSelect = document.getElementById('editPackage');
+      for (let key in packageToRoomType) {
+        if (packageToRoomType[key] === booking.room) {
+          packageSelect.value = key;
+          break;
+        }
+      }
+      
+      showScreen('editBooking');
+    };
+
+    // Handle edit booking form submission
+    document.getElementById('editBookingForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const bookingId = editingBookingId;
+      const formData = {
+        name: document.getElementById('editName').value.trim(),
+        contact: document.getElementById('editContact').value.trim(),
+        email: document.getElementById('editEmail').value.trim(),
+        date: document.getElementById('editDate').value,
+        time: document.getElementById('editTime').value,
+        guests: parseInt(document.getElementById('editGuests').value),
+        package: document.getElementById('editPackage').value,
+        requests: document.getElementById('editRequests').value.trim()
+      };
+      
+      // Validate
+      if (!validatePhone(formData.contact) || !validateEmail(formData.email) || !validateDate(formData.date)) {
+        const editMessage = document.getElementById('editMessage');
+        editMessage.className = 'alert alert-error';
+        editMessage.style.display = 'block';
+        editMessage.textContent = '✗ Please check your input and try again.';
+        
+        setTimeout(() => {
+          editMessage.style.display = 'none';
+        }, 3000);
+        return;
+      }
+      
+      // Update booking
+      const state = loadDashboardState();
+      const bookingIndex = state.bookings.findIndex(b => b.id === bookingId);
+      
+      if (bookingIndex === -1) {
+        alert('Booking not found');
+        return;
+      }
+      
+      const pricePerPerson = packagePrices[formData.package] || 0;
+      const total = pricePerPerson * formData.guests;
+      
+      const checkoutDate = new Date(formData.date);
+      checkoutDate.setDate(checkoutDate.getDate() + 1);
+      
+      state.bookings[bookingIndex] = {
+        ...state.bookings[bookingIndex],
+        guest: formData.name,
+        contact: formData.contact,
+        email: formData.email,
+        room: packageToRoomType[formData.package],
+        checkin: formData.date,
+        checkout: checkoutDate.toISOString().split('T')[0],
+        guests: formData.guests,
+        time: formData.time,
+        requests: formData.requests,
+        amount: total
+      };
+      
+      saveDashboardState(state);
+      
+      const editMessage = document.getElementById('editMessage');
+      editMessage.className = 'alert alert-success';
+      editMessage.style.display = 'block';
+      editMessage.innerHTML = `
+        <strong>✓ Booking Updated Successfully!</strong><br>
+        Your changes have been saved.
+      `;
+      
+      setTimeout(() => {
+        editMessage.style.display = 'none';
+        displayClientBookings();
+        showScreen('clientDashboard');
+      }, 2000);
+    });
+
+    // Cancel booking function
+    window.cancelClientBooking = function(bookingId) {
+      // Show modal for cancellation reason
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      `;
+
+      modal.innerHTML = `
+        <div style="
+          background: white;
+          padding: 2rem;
+          border-radius: 12px;
+          max-width: 500px;
+          width: 90%;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        ">
+          <h2 style="margin-bottom: 1rem; color: var(--dark); font-size: 1.5rem;">
+            ⚠️ Cancel Booking
+          </h2>
+          
+          <p style="color: var(--gray); margin-bottom: 1.5rem; line-height: 1.6;">
+            Booking ID: <strong>${bookingId}</strong><br>
+            Are you sure you want to cancel this booking? Please tell us why.
+          </p>
+          
+          <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; margin-bottom: 0.5rem; color: var(--dark); font-weight: 500;">
+              Reason for Cancellation
+            </label>
+            <textarea id="cancellationReason" placeholder="Please explain why you're cancelling this booking..." style="
+              width: 100%;
+              padding: 0.75rem;
+              border: 2px solid var(--gray-200);
+              border-radius: 8px;
+              font-family: 'Poppins', sans-serif;
+              font-size: 0.9rem;
+              resize: vertical;
+              min-height: 100px;
+              color: var(--dark);
+            "></textarea>
+          </div>
+          
+          <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+            <button onclick="this.closest('[style*=fixed]').remove()" style="
+              padding: 0.75rem 1.5rem;
+              border: 2px solid var(--gray-200);
+              background: white;
+              color: var(--dark);
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: 500;
+              font-family: 'Poppins', sans-serif;
+              transition: all 0.3s;
+            " onmouseover="this.style.background='var(--light)'" onmouseout="this.style.background='white'">
+              🔙 Keep Booking
+            </button>
+            <button onclick="confirmCancelBooking('${bookingId}')" style="
+              padding: 0.75rem 1.5rem;
+              background: var(--danger);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-weight: 500;
+              font-family: 'Poppins', sans-serif;
+              transition: all 0.3s;
+            " onmouseover="this.style.background='#d93448'" onmouseout="this.style.background='var(--danger)'">
+              ✓ Confirm Cancellation
+            </button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(modal);
+      document.getElementById('cancellationReason').focus();
+    };
+
+    // Confirm and process cancellation
+    window.confirmCancelBooking = function(bookingId) {
+      const reason = document.getElementById('cancellationReason').value.trim();
+      
+      if (!reason) {
+        alert('Please provide a reason for cancellation');
+        return;
+      }
+
+      const state = loadDashboardState();
+      const bookingIndex = state.bookings.findIndex(b => b.id === bookingId);
+      
+      if (bookingIndex === -1) {
+        alert('Booking not found');
+        return;
+      }
+
+      const booking = state.bookings[bookingIndex];
+      
+      // Create cancellation record with details
+      const cancellationRecord = {
+        bookingId: bookingId,
+        customerName: booking.guest,
+        customerEmail: booking.email,
+        customerContact: booking.contact,
+        tourDate: booking.checkin,
+        tourPackage: booking.room,
+        guests: booking.guests,
+        totalAmount: booking.amount,
+        cancellationReason: reason,
+        cancellationDate: new Date().toISOString()
+      };
+
+      // Initialize cancellations array if it doesn't exist
+      if (!state.cancellations) {
+        state.cancellations = [];
+      }
+
+      // Add to cancellations history
+      state.cancellations.push(cancellationRecord);
+
+      // Remove booking from array
+      state.bookings.splice(bookingIndex, 1);
+      
+      // Update customer's booking list
+      const customer = state.customers.find(c => c.email === booking.email);
+      if (customer) {
+        customer.bookings = customer.bookings.filter(id => id !== bookingId);
+      }
+      
+      // Save updated state
+      saveDashboardState(state);
+      
+      // Close modal
+      document.querySelector('[style*="z-index: 9999"]').remove();
+      
+      // Show confirmation message
+      const clientMessage = document.getElementById('clientMessage');
+      clientMessage.className = 'alert alert-success';
+      clientMessage.style.display = 'block';
+      clientMessage.innerHTML = `
+        <strong>✓ Booking Cancelled Successfully</strong><br>
+        Your booking #${bookingId} has been cancelled.<br>
+        <small>Reason recorded: ${reason.substring(0, 50)}...</small>
+      `;
+      
+      setTimeout(() => {
+        clientMessage.style.display = 'none';
+        displayClientBookings();
+      }, 3000);
+    };
+
+    // Handle staff login
+    document.getElementById('staffLoginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const staffId = document.getElementById('staffId').value.trim();
+      const password = document.getElementById('staffPassword').value.trim();
+
+      if (staffId && password.length >= 4) {
+        currentStaffId = staffId;
+        const state = loadDashboardState();
+        
+        // Initialize staff on duty tracking
+        if (!state.staffOnDuty) {
+          state.staffOnDuty = {};
+        }
+        
+        // Add staff to on-duty list
+        state.staffOnDuty[staffId] = {
+          name: staffId,
+          status: 'on-duty',
+          loginTime: new Date().toLocaleTimeString()
+        };
+        
+        saveDashboardState(state);
+        displayAllStaffBookings();
+        showScreen('staffDashboard');
+        updateClock();
+        setInterval(updateClock, 1000);
+        setInterval(updateStaffDashboardStats, 2000);
+        e.target.reset();
+      } else {
+        const staffMessage = document.getElementById('staffMessage');
+        staffMessage.className = 'alert alert-error';
+        staffMessage.style.display = 'block';
+        staffMessage.textContent = '✗ Invalid Staff ID or Password (min 4 characters). Please try again.';
+
+        setTimeout(() => {
+          staffMessage.style.display = 'none';
+        }, 3000);
+      }
+    });
+
+    // Display all staff bookings
+    function displayAllStaffBookings() {
+      const state = loadDashboardState();
+      const bookings = state.bookings || [];
+      
+      if (bookings.length === 0) {
+        document.getElementById('staffBookingsList').innerHTML = '';
+        document.getElementById('noStaffBookings').classList.remove('hidden');
+        updateStaffDashboardStats();
+        return;
+      }
+      
+      renderStaffBookingsList(bookings);
+      updateStaffDashboardStats();
+    }
+
+    // Render staff booking list with check-in/out buttons
+    function renderStaffBookingsList(bookings) {
+      const container = document.getElementById('staffBookingsList');
+      
+      const bookingCards = bookings.map(booking => `
+        <div style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid #e5e7eb; margin-bottom: 1rem; display: grid; grid-template-columns: auto 1fr auto; gap: 1rem; align-items: center;">
+          <div>
+            <p style="margin: 0; font-weight: 700; color: #2b2d42; font-size: 1rem;">${booking.guest}</p>
+            <p style="margin: 0.25rem 0 0 0; color: #6b7280; font-size: 0.85rem;">${booking.email}</p>
+            <p style="margin: 0.25rem 0 0 0; color: #6b7280; font-size: 0.85rem;">${booking.contact}</p>
+          </div>
+          <div style="text-align: left;">
+            <p style="margin: 0; color: #6b7280; font-size: 0.85rem;"><strong>Date:</strong> ${booking.checkin}</p>
+            <p style="margin: 0.25rem 0 0 0; color: #6b7280; font-size: 0.85rem;"><strong>Time:</strong> ${booking.time}</p>
+            <p style="margin: 0.25rem 0 0 0; color: #6b7280; font-size: 0.85rem;"><strong>Guests:</strong> ${booking.guests}</p>
+            <p style="margin: 0.25rem 0 0 0; color: #6b7280; font-size: 0.85rem;"><strong>Package:</strong> ${booking.room}</p>
+          </div>
+          <div style="text-align: right;">
+            <span style="display: inline-block; background: ${booking.checkInStatus === 'checked-in' ? '#dbeafe' : booking.checkInStatus === 'checked-out' ? '#fee2e2' : '#fef3c7'}; color: ${booking.checkInStatus === 'checked-in' ? '#1e40af' : booking.checkInStatus === 'checked-out' ? '#991b1b' : '#92400e'}; padding: 0.4rem 0.8rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">
+              ${booking.checkInStatus === 'checked-in' ? 'Checked In' : booking.checkInStatus === 'checked-out' ? 'Checked Out' : 'Pending'}
+            </span>
+            <div style="display: flex; gap: 0.5rem;">
+              ${booking.checkInStatus !== 'checked-in' ? `<button class="btn btn-primary btn-small" onclick="staffCheckIn('${booking.id}')" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">Check-in</button>` : ''}
+              ${booking.checkInStatus === 'checked-in' ? `<button class="btn btn-small" onclick="staffCheckOut('${booking.id}')" style="background: #ef4444; color: white; font-size: 0.8rem; padding: 0.4rem 0.8rem; border: none; border-radius: 4px; cursor: pointer;">Check-out</button>` : ''}
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      container.innerHTML = bookingCards;
+      document.getElementById('noStaffBookings').classList.add('hidden');
+    }
+
+    // Staff check-in function
+    window.staffCheckIn = function(bookingId) {
+      const state = loadDashboardState();
+      const booking = state.bookings.find(b => b.id === bookingId);
+      
+      if (booking) {
+        booking.checkInStatus = 'checked-in';
+        booking.checkInTime = new Date().toLocaleTimeString();
+        booking.checkInStaff = currentStaffId;
+        saveDashboardState(state);
+        displayAllStaffBookings();
+      }
+    };
+
+    // Staff check-out function
+    window.staffCheckOut = function(bookingId) {
+      const state = loadDashboardState();
+      const booking = state.bookings.find(b => b.id === bookingId);
+      
+      if (booking) {
+        booking.checkInStatus = 'checked-out';
+        booking.checkOutTime = new Date().toLocaleTimeString();
+        booking.checkOutStaff = currentStaffId;
+        saveDashboardState(state);
+        displayAllStaffBookings();
+      }
+    };
+
+    // Update staff dashboard stats
+    function updateStaffDashboardStats() {
+      const state = loadDashboardState();
+      const bookings = state.bookings || [];
+      
+      const checkedIn = bookings.filter(b => b.checkInStatus === 'checked-in').length;
+      const checkedOut = bookings.filter(b => b.checkInStatus === 'checked-out').length;
+      const pending = bookings.filter(b => !b.checkInStatus || b.checkInStatus === 'pending').length;
+      
+      document.getElementById('checkedInCount').textContent = checkedIn;
+      document.getElementById('checkedOutCount').textContent = checkedOut;
+      document.getElementById('pendingCount').textContent = pending;
+    }
+
+    // Real-time clock update
+    function updateClock() {
+      const now = new Date();
+      const time = now.toLocaleTimeString();
+      const clockElement = document.getElementById('currentTime');
+      if (clockElement) {
+        clockElement.textContent = time;
+      }
+    }
+
+    // Handle admin login
+    document.getElementById('adminForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = document.getElementById('adminUser').value;
+      const pass = document.getElementById('adminPass').value;
+
+      if (user === 'admin' && pass === 'admin123') {
+        // Redirect to dashboard.html
+        window.location.href = '/dashboard';
+      } else {
+        const adminMessage = document.getElementById('adminMessage');
+        adminMessage.className = 'alert alert-error';
+        adminMessage.style.display = 'block';
+        adminMessage.textContent = '✗ Invalid credentials. Please try again.';
+
+        setTimeout(() => {
+          adminMessage.style.display = 'none';
+        }, 3000);
+      }
+
+      e.target.reset();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - E-Reserve</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #006994, #0088b8);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #006994;
+        }
+
+        .card h2 {
+            color: #006994;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        /* Photo Upload Section */
+        .upload-section {
+            margin-bottom: 25px;
+        }
+
+        .upload-box {
+            border: 2px dashed #006994;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-box:hover {
+            background: #e6f7ff;
+            border-color: #0088b8;
+        }
+
+        .upload-box.dragover {
+            background: #e6f7ff;
+            border-color: #00cc99;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .upload-box h3 {
+            color: #006994;
+            margin-bottom: 8px;
+        }
+
+        .upload-box p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .btn-upload {
+            background: linear-gradient(135deg, #006994, #0088b8);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .btn-upload:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 105, 148, 0.3);
+        }
+
+        /* Photo Gallery */
+        .photos-section {
+            margin-top: 30px;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .photo-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-info {
+            padding: 12px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #eee;
+        }
+
+        .photo-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .photo-item:hover .photo-delete {
+            opacity: 1;
+        }
+
+        .photo-delete:hover {
+            background: #dc2626;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            animation: slideDown 0.3s;
+        }
+
+        .alert-success {
+            background: #d4f4dd;
+            color: #00cc99;
+            border: 1px solid #00cc99;
+        }
+
+        .alert-error {
+            background: #ffe6e6;
+            color: #ff6b6b;
+            border: 1px solid #ff6b6b;
+        }
+
+        .alert-info {
+            background: #cce7ff;
+            color: #006994;
+            border: 1px solid #006994;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #006994;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Logout Button */
+        .btn-logout {
+            background: #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            float: right;
+            margin-top: 15px;
+        }
+
+        .btn-logout:hover {
+            background: #dc2626;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏖️ Welcome to Your Dashboard</h1>
+            <p id="userGreeting">Loading...</p>
+            <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+        </div>
+
+        <!-- Alerts Container -->
+        <div id="alertContainer"></div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Photo Upload Card -->
+            <div class="card">
+                <h2>📸 Upload Photos</h2>
+                <div class="upload-section">
+                    <div class="upload-box" id="uploadBox">
+                        <div class="upload-icon">📷</div>
+                        <h3>Drop your photos here</h3>
+                        <p>or click to select files</p>
+                        <input type="file" id="fileInput" accept="image/*" multiple>
+                        <button class="btn-upload" onclick="document.getElementById('fileInput').click()">
+                            Select Photos
+                        </button>
+                    </div>
+                    <p style="margin-top: 15px; font-size: 12px; color: #999;">
+                        ✓ Supported formats: JPG, PNG, GIF<br>
+                        ✓ Max size: 5MB per file
+                    </p>
+                </div>
+            </div>
+
+            <!-- Profile Info Card -->
+            <div class="card">
+                <h2>👤 Your Profile</h2>
+                <p><strong>Name:</strong> <span id="userName">-</span></p>
+                <p><strong>Email:</strong> <span id="userEmail">-</span></p>
+                <p><strong>Total Photos:</strong> <span id="totalPhotos">0</span></p>
+                <p><strong>Join Date:</strong> <span id="joinDate">-</span></p>
+            </div>
+        </div>
+
+        <!-- Photos Section -->
+        <div class="card photos-section">
+            <h2>📷 Your Photos Gallery</h2>
+            <div id="photosGallery" class="photos-grid">
+                <div class="empty-state">
+                    <div class="empty-state-icon">📁</div>
+                    <p>No photos uploaded yet. Start by uploading your first photo!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserInfo();
+            loadPhotos();
+            setupUploadHandlers();
+        });
+
+        // Load user information
+        function loadUserInfo() {
+            const currentUser = sessionStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            const user = JSON.parse(currentUser);
+            document.getElementById('userName').textContent = user.name;
+            document.getElementById('userEmail').textContent = user.email;
+            document.getElementById('userGreeting').textContent = `Welcome back, ${user.name}! 👋`;
+            document.getElementById('joinDate').textContent = new Date().toLocaleDateString();
+        }
+
+        // Setup file upload handlers
+        function setupUploadHandlers() {
+            const uploadBox = document.getElementById('uploadBox');
+            const fileInput = document.getElementById('fileInput');
+
+            // Click to upload
+            uploadBox.addEventListener('click', () => fileInput.click());
+
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files);
+            });
+
+            // Drag and drop
+            uploadBox.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadBox.classList.add('dragover');
+            });
+
+            uploadBox.addEventListener('dragleave', () => {
+                uploadBox.classList.remove('dragover');
+            });
+
+            uploadBox.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadBox.classList.remove('dragover');
+                handleFiles(e.dataTransfer.files);
+            });
+        }
+
+        // Handle file uploads
+        async function handleFiles(files) {
+            if (files.length === 0) return;
+
+            const user = JSON.parse(sessionStorage.getItem('currentUser'));
+            
+            for (let file of files) {
+                if (file.size > 5 * 1024 * 1024) {
+                    showAlert('File too large: ' + file.name, 'error');
+                    continue;
+                }
+
+                if (!file.type.startsWith('image/')) {
+                    showAlert('Invalid file type: ' + file.name, 'error');
+                    continue;
+                }
+
+                await uploadPhoto(file, user.email);
+            }
+        }
+
+        // Upload photo
+        async function uploadPhoto(file, userEmail) {
+            const formData = new FormData();
+            formData.append('photo', file);
+            formData.append('userEmail', userEmail);
+
+            try {
+                const response = await fetch('/api/upload-photo', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('✅ Photo uploaded successfully!', 'success');
+                    loadPhotos();
+                    document.getElementById('fileInput').value = '';
+                } else {
+                    showAlert('❌ ' + (data.message || 'Upload failed'), 'error');
+                }
+            } catch (error) {
+                showAlert('❌ Error uploading photo: ' + error.message, 'error');
+                console.error('Upload error:', error);
+            }
+        }
+
+        // Load photos
+        async function loadPhotos() {
+            const user = JSON.parse(sessionStorage.getItem('currentUser'));
+            
+            try {
+                const response = await fetch(`/api/photos?userEmail=${user.email}`);
+                const data = await response.json();
+
+                const gallery = document.getElementById('photosGallery');
+
+                if (data.success && data.photos.length > 0) {
+                    gallery.innerHTML = '';
+                    
+                    data.photos.forEach(photo => {
+                        const photoItem = document.createElement('div');
+                        photoItem.className = 'photo-item';
+                        photoItem.innerHTML = `
+                            <img src="${photo.url}" alt="Uploaded Photo">
+                            <button class="photo-delete" onclick="deletePhoto('${photo.id}')" title="Delete photo">
+                                ✕
+                            </button>
+                            <div class="photo-info">
+                                ${new Date(photo.uploadDate).toLocaleDateString()}
+                            </div>
+                        `;
+                        gallery.appendChild(photoItem);
+                    });
+
+                    document.getElementById('totalPhotos').textContent = data.photos.length;
+                } else {
+                    gallery.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📁</div>
+                            <p>No photos uploaded yet. Start by uploading your first photo!</p>
+                        </div>
+                    `;
+                    document.getElementById('totalPhotos').textContent = '0';
+                }
+            } catch (error) {
+                console.error('Error loading photos:', error);
+                showAlert('Error loading photos', 'error');
+            }
+        }
+
+        // Delete photo
+        async function deletePhoto(photoId) {
+            if (!confirm('Are you sure you want to delete this photo?')) return;
+
+            try {
+                const response = await fetch(`/api/delete-photo/${photoId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('✅ Photo deleted!', 'success');
+                    loadPhotos();
+                } else {
+                    showAlert('❌ ' + (data.message || 'Delete failed'), 'error');
+                }
+            } catch (error) {
+                showAlert('❌ Error deleting photo: ' + error.message, 'error');
+            }
+        }
+
+        // Show alert messages
+        function showAlert(message, type = 'info') {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            container.appendChild(alert);
+
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        }
+
+        // Logout
+        function logout() {
+            sessionStorage.removeItem('currentUser');
+            window.location.href = '/';
+        }
+
+        // Auto-load photos every 5 seconds to show real-time updates
+        setInterval(loadPhotos, 5000);
+    </script>
+</body>
+</html>
