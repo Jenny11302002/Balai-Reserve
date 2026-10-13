@@ -35,6 +35,11 @@ import { dirname } from "path";
 import { createServer } from "http";
 import { Server } from "socket.io";
 
+// ===== FIREBASE ENABLED - NO MYSQL/SEQUELIZE NEEDED =====
+console.log("🔥 Using Firebase as database - MySQL/Sequelize disabled");
+// Note: Firebase initialization happens in config/firebase.js
+// No database sync needed - Firebase handles everything automatically!
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 

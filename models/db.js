@@ -37,6 +37,11 @@ export const sequelize = new Sequelize(
     host: process.env.DB_HOST || "localhost",
     port: process.env.DB_PORT || 3306,
     dialect: "mysql",
+    dialectOptions: {
+      ssl: process.env.DB_SSL === 'true' ? {
+        rejectUnauthorized: true
+      } : false
+    },
     connectTimeout: 10000,
     pool: {
       max: 5,

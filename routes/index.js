@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+// ===== FIREBASE CONTROLLERS (Updated to use Firebase) =====
 import {
   loginPage,
   registerPage,
@@ -11,9 +12,10 @@ import {
   logoutUser,
   resetPasswordRequest,
   resetPassword
-} from "../controllers/authController.js";
+} from "../controllers/authControllerFirebase.js";
 import { homePage } from "../controllers/homeController.js";
-import { uploadPhoto, getPhotos, deletePhoto, getAllPhotos } from "../controllers/photoController.js";
+import { uploadPhoto, getPhotos, deletePhoto, getAllPhotos } from "../controllers/photoControllerFirebase.js";
+import { upload } from "../config/multer.js";
 
 const router = express.Router();
 
@@ -64,8 +66,8 @@ router.get("/index.html", (req, res) => {
 router.get("/home", homePage);
 
 // ===== PHOTO UPLOAD ROUTES =====
-// Upload photo endpoint
-router.post("/api/upload-photo", uploadPhoto);
+// Upload photo endpoint (with multer middleware for Firebase)
+router.post("/api/upload-photo", upload.single('photo'), uploadPhoto);
 
 // Get user photos endpoint
 router.get("/api/photos", getPhotos);
